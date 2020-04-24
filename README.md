@@ -19,6 +19,14 @@ A DCGAN is anextension of Generative Adversarial Network that uses convolutional
 
 Above we can see what a **DCGAN Generator** looks like. A 100 dimensional uniform distribution <b>Z</b> is projected to a small spatial extent convolutional representation with many feature maps. A series of four fractionally-strided convolutions (in some recent papers, these are wrongly called deconvolutions) then convert this high level representation into a 64 × 64 pixel image. Notably, no fully connected or pooling layers are used.
 
+### Architecture guidelines for stable Deep Convolutional GANs
+
+- Replace any pooling layers with strided convolutions (discriminator) and fractional-strided convolutions (generator).
+- Use batchnorm in both the generator and the discriminator.
+- Remove fully connected hidden layers for deeper architectures.
+- Use ReLU activation in generator for all layers except for the output, which uses Tanh.
+- Use LeakyReLU activation in the discriminator for all layers.
+
 ### Discriminator Implementation
 
 ```python
@@ -144,14 +152,6 @@ class Generator(nn.Module):
         
         return x
 ```
-
-## Architecture guidelines for stable Deep Convolutional GANs
-
-- Replace any pooling layers with strided convolutions (discriminator) and fractional-strided convolutions (generator).
-- Use batchnorm in both the generator and the discriminator.
-- Remove fully connected hidden layers for deeper architectures.
-- Use ReLU activation in generator for all layers except for the output, which uses Tanh.
-- Use LeakyReLU activation in the discriminator for all layers.
 
 ## Details of Adversarial Training
 
