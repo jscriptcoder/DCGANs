@@ -16,3 +16,10 @@ A DCGAN is anextension of Generative Adversarial Network that uses convolutional
 - Remove fully connected hidden layers for deeper architectures.
 - Use ReLU activation in generator for all layers except for the output, which uses Tanh.
 - Use LeakyReLU activation in the discriminator for all layers.
+
+## Details of Adversarial Training
+
+- Scaling images to the range of the tanh activation function [-1, 1].
+- All weights are initialized from a zero-centered Normal distribution with standard deviation 0.02.
+- In the LeakyReLU, the slope of the leak is set to 0.2.
+- Adam optimizer with learning rate of 0.0002 and β1 is set to 0.5.
