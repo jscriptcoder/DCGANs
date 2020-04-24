@@ -56,7 +56,6 @@ class Discriminator(nn.Module):
         
         self.leaky_relu = nn.LeakyReLU(0.2)
         
-
     def forward(self, x):
         """
         Forward propagation of the neural network
@@ -122,7 +121,6 @@ class Generator(nn.Module):
         self.relu = nn.ReLU()
         self.tanh = nn.Tanh()
         
-
     def forward(self, x):
         """
         Forward propagation of the neural network
