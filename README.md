@@ -10,7 +10,6 @@ Examples:
 <p align="center">
   <img src="assets/dcgan_example1.png" width="80%" /><br />
   <img src="assets/dcgan_example2.png" width="80%" /><br />
-  <sub>Images from [paper](https://arxiv.org/pdf/1511.06434.pdf)</sub>
 </p>
 
 ## What is a DCGAN?
