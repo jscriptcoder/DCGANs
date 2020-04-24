@@ -8,3 +8,11 @@ The goal of this project is to get a generator network to creaate new images of 
 
 ## What is a DCGAN?
 A DCGAN is anextension of Generative Adversarial Network that uses convolutional and convolutional-transpose layers in the discriminator and generator, respectively. As described in the [paper](https://arxiv.org/pdf/1511.06434.pdf), the **discriminator** is made up of strided [convolutional layers](https://cs231n.github.io/convolutional-networks/#conv), [batch norm layers](https://arxiv.org/abs/1502.03167), and [LeakyReLU activations](https://ml-cheatsheet.readthedocs.io/en/latest/activation_functions.html#leakyrelu). The input is an image and the output is a scalar probability that the input is from the real data distribution. The **generator** is comprised of [convolutional-transpose layers](https://medium.com/activating-robotic-minds/up-sampling-with-transposed-convolution-9ae4f2df52d0), batch norm layers, and [ReLU activations](https://ml-cheatsheet.readthedocs.io/en/latest/activation_functions.html#relu). The input is a [latent vector](https://towardsdatascience.com/understanding-latent-space-in-machine-learning-de5a7c687d8d), `z`, that is drawn from a standard normal distribution and the output is an image, same size as the input of the discriminator
+
+## Architecture guidelines for stable Deep Convolutional GANs
+
+- Replace any pooling layers with strided convolutions (discriminator) and fractional-strided convolutions (generator).
+- Use batchnorm in both the generator and the discriminator.
+- Remove fully connected hidden layers for deeper architectures.
+- Use ReLU activation in generator for all layers except for the output, which uses Tanh.
+- Use LeakyReLU activation in the discriminator for all layers.
