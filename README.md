@@ -8,8 +8,8 @@ The goal of this project is to get a generator network to creaate new images of 
 
 Examples:
 <p align="center">
-  <img src="assets/dcgan_example1.png" width="80%" /><br />
-  <img src="assets/dcgan_example2.png" width="80%" /><br />
+  <img src="assets/dcgan_example1.png" width="60%" /><br />
+  <img src="assets/dcgan_example2.png" width="60%" /><br />
 </p>
 
 ## What is a DCGAN?
