@@ -19,6 +19,134 @@ A DCGAN is anextension of Generative Adversarial Network that uses convolutional
 
 Above we can see what a **DCGAN Generator** looks like. A 100 dimensional uniform distribution <b>Z</b> is projected to a small spatial extent convolutional representation with many feature maps. A series of four fractionally-strided convolutions (in some recent papers, these are wrongly called deconvolutions) then convert this high level representation into a 64 × 64 pixel image. Notably, no fully connected or pooling layers are used.
 
+### Discriminator Implementation
+
+```python
+class Discriminator(nn.Module):
+
+    def __init__(self, conv_dim):
+        """
+        Initialize the Discriminator Module
+        Args:
+            conv_dim (int): The depth of the first convolutional layer
+        """
+        super(Discriminator, self).__init__()
+
+        self.conv_dim = conv_dim
+        
+        # 3x64x64
+        self.conv1 = conv(in_channels=3, 
+                          out_channels=conv_dim, 
+                          kernel_size=4, 
+                          batch_norm=False)
+        # 32x32x32
+        self.conv2 = conv(in_channels=conv_dim, 
+                          out_channels=conv_dim*2, 
+                          kernel_size=4)
+        # (32x2)x16x16
+        self.conv3 = conv(in_channels=conv_dim*2, 
+                          out_channels=conv_dim*4, 
+                          kernel_size=4)
+        # (32x4)x8x8
+        self.conv4 = conv(in_channels=conv_dim*4, 
+                          out_channels=conv_dim*8, 
+                          kernel_size=4)
+        # (32x8)x4x4
+        self.fc = nn.Linear(conv_dim*8*4*4, 1) # -> output: 1
+        
+        self.leaky_relu = nn.LeakyReLU(0.2)
+        
+
+    def forward(self, x):
+        """
+        Forward propagation of the neural network
+        
+        Args:
+            x (Tensor): The input to the neural network     
+        
+        Return:
+            Discriminator logits; the output of the neural network
+        """
+        
+        x = self.leaky_relu(self.conv1(x))
+        x = self.leaky_relu(self.conv2(x))
+        x = self.leaky_relu(self.conv3(x))
+        x = self.leaky_relu(self.conv4(x))
+        
+        # flatten
+        x = x.view(-1, self.conv_dim*8*4*4)
+        
+        x = self.fc(x)
+        
+        return x
+```
+
+### Generator Implementation
+
+```python
+class Generator(nn.Module):
+    
+    def __init__(self, z_size, conv_dim):
+        """
+        Initialize the Generator Module
+        
+        Args:
+            z_size (int): The length of the input latent vector, z
+            conv_dim (int): 
+                The depth of the inputs to the *last* transpose convolutional layer
+        """
+        super(Generator, self).__init__()
+        
+        self.conv_dim = conv_dim
+        
+        # 100
+        self.fc = nn.Linear(z_size, conv_dim*8*4*4)
+        # (32x8)x4x4
+        self.deconv1 = deconv(in_channels=conv_dim*8, 
+                              out_channels=conv_dim*4, 
+                              kernel_size=4)
+        # (32x4)x8x8
+        self.deconv2 = deconv(in_channels=conv_dim*4, 
+                              out_channels=conv_dim*2, 
+                              kernel_size=4)
+        # (32x2)x16x16
+        self.deconv3 = deconv(in_channels=conv_dim*2, 
+                              out_channels=conv_dim, 
+                              kernel_size=4)
+        # 32x32x32
+        self.deconv4 = deconv(in_channels=conv_dim, 
+                              out_channels=3, 
+                              kernel_size=4, 
+                              batch_norm=False) # -> output: 3x64x64
+        
+        self.relu = nn.ReLU()
+        self.tanh = nn.Tanh()
+        
+
+    def forward(self, x):
+        """
+        Forward propagation of the neural network
+        
+        Args:
+            x (Tensor): The input to the neural network
+        
+        Return:
+            A 3x64x64 Tensor image as output
+        """
+        
+        x = self.fc(x)
+        
+        # reshape
+        x = x.view(-1, self.conv_dim*8, 4, 4) # (batch_size, channels, 4, 4)
+        
+        x = self.relu(self.deconv1(x))
+        x = self.relu(self.deconv2(x))
+        x = self.relu(self.deconv3(x))
+        x = self.tanh(self.deconv4(x))
+        
+        return x
+```
+
 ## Architecture guidelines for stable Deep Convolutional GANs
 
 - Replace any pooling layers with strided convolutions (discriminator) and fractional-strided convolutions (generator).
