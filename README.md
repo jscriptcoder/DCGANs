@@ -1,6 +1,6 @@
 # Deep Convolutional Generative Adversarial Networks
 
-WORK IN PROGRESS!!
+See [**Jupyer notebook**](https://github.com/jscriptcoder/DCGANs/blob/master/face_generation.ipynb) for details about this project
 
 This project is based on the paper: [Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks](https://arxiv.org/abs/1511.06434), and part of [Udacity Deep Learning Nanodegree program](https://www.udacity.com/course/deep-learning-nanodegree--nd101)
 
