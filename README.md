@@ -159,3 +159,5 @@ class Generator(nn.Module):
 - All weights are initialized from a zero-centered Normal distribution with standard deviation 0.02.
 - In the LeakyReLU, the slope of the leak is set to 0.2.
 - Adam optimizer with learning rate of 0.0002 and β1 is set to 0.5.
+
+<!-- sort 1 -->
